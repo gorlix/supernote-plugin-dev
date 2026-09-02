@@ -43,7 +43,7 @@ ln -s .vendor/supernote-plugin-dev/skills/supernote-plugin-dev .agents/skills/su
 ## What's inside
 
 - `skills/supernote-plugin-dev/SKILL.md` — entry point: architecture overview, plugin lifecycle, development workflow, critical constraints, a full API decision tree, and 40+ numbered gotchas.
-- `skills/supernote-plugin-dev/references/` — deeper reference docs per topic: API quick reference, common code patterns, type definitions, i18n, floating windows, pen/EMR handling, SQLite storage, and setup/build/debug.
+- `skills/supernote-plugin-dev/references/` — deeper reference docs per topic: API quick reference, common code patterns, type definitions, i18n, floating windows, pen/EMR handling, SQLite storage, setup/build/debug, and a publish-review self-audit checklist.
 
 The live [`supernote-docs` MCP](https://docs.supernote.com/mcp) (add it with `claude mcp add --transport http --scope project supernote-docs https://docs.supernote.com/mcp`) is always the authoritative source for API signatures — this skill points to it and defers to it whenever the two disagree.
 

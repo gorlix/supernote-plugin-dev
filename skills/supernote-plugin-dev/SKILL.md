@@ -68,6 +68,7 @@ against the `supernote-docs` MCP, which is authoritative):
 | Floating window overlay | `references/floating-window.md` |
 | Pen lasso, EMR pen disable, scoped pen lock | `references/pen-emr.md` |
 | SQLite local storage in plugins | `references/sqlite.md` |
+| Preparing to submit a plugin for review / publish | `references/publish-review.md` |
 
 The reference files contain **authoritative API signatures and constraints** gathered from real
 plugin builds — do not rely on memory alone; the live MCP wins on any conflict.
@@ -219,9 +220,14 @@ What do you need to do?
 │     3. recognizeElements(elements, pageSize) → APIResponse<string>
 │     4. cancelRecognize() to abort a long-running recognition if needed
 │
-└─ Extract hardcoded strings / add multi-language support (i18n)
-   → references/i18n.md Pattern 7 (JSON button name) + Pattern 10 (registerLangListener)
-   → Generic extract-translate-convert workflow for new locales: patterns.md Pattern 12
+├─ Extract hardcoded strings / add multi-language support (i18n)
+│  → references/i18n.md Pattern 7 (JSON button name) + Pattern 10 (registerLangListener)
+│  → Generic extract-translate-convert workflow for new locales: patterns.md Pattern 12
+│
+└─ Ready to submit the plugin for review / publish, unsure if it'll pass
+   → references/publish-review.md — self-audit checklist derived from Supernote's
+     published review process (permissions, file/data ops, network disclosure, description
+     accuracy)
 ```
 
 ## Common Gotchas
@@ -267,6 +273,7 @@ What do you need to do?
 39. **Reinstalling from Settings → Apps → Plugins does NOT read the file you just `adb push`ed to `MyStyle/`**: the host keeps its own managed copy at `MyStyle/Plugins/<name>.snplg` and the in-UI "reinstall/update" action installs from *that* copy, not from whatever you dropped in `MyStyle/` root. Confirmed on-device: pushing a rebuilt `.snplg` to `MyStyle/` and tapping reinstall silently reran the **old** build (same `versionName`/`versionCode` as before) — looked exactly like "the fix didn't do anything." Push directly to `MyStyle/Plugins/<name>.snplg` (overwrite in place) when iterating on a fix, or use "Add Plugin" to browse to the new file explicitly rather than reinstalling the existing entry.
 40. **Every `console.log` gated behind `__DEV__` is silent in a real install — `buildPlugin.sh` always bundles with `--dev false`**, including ad-hoc local test builds, not just CI releases. There is typically no separate "debug build" path in a plugin's build script. Consequence: extensive `__DEV__`-gated logging is completely invisible via `adb logcat` on any sideloaded build, which can make a real bug look like "nothing happened" when actually the JS ran fine but you can't see it. Keep one deliberately **ungated** `console.log`/native-log line at startup (e.g. `${TAG} v${versionName} (code ${versionCode}) starting`, reading from `PluginConfig.json`) so `adb logcat` at least confirms which build is actually running before debugging further — this also catches gotcha #39 (stale reinstall) immediately instead of after a confusing detour. Prefer a custom logcat tag over the generic `ReactNativeJS` tag if the plugin has native code too (route both JS and native logs through one tag) — it makes `adb logcat -v time -s <TAG>` show the full picture in one stream instead of juggling multiple filters.
 41. **Testing a plugin's own TCP/network sockets doesn't need the device on the same network as your dev machine**: `adb forward tcp:<local> tcp:<device-port>` tunnels a local TCP port straight to a port the plugin opened on the device over the existing USB/ADB connection, regardless of WiFi. Use it to `curl`/`nc`/raw-socket-probe a plugin's listener directly (`adb forward tcp:18888 tcp:8888` then `curl http://127.0.0.1:18888/`) instead of asking the user to find and share the device's WiFi IP. Combine with `adb logcat -v time -s <TAG>` (see gotcha #40) to correlate what you see over the forwarded connection with what the plugin's own logs say happened — this is how a "the tunnel opens but relays fail" bug (native socket blocked by an undeclared permission, not a code bug) gets diagnosed instead of guessed at.
+42. **A hardcoded default connection target reads as backdoor-shaped in security review, even when it's harmless**: shipping a plugin with a fixed default IP/hostname/URL (e.g. a developer's own remote/VPN address baked in as the fallback for a "target host" setting) is functionally inert if it's just a convenience default — but a manual reviewer reading the code sees "plugin connects somewhere fixed and undisclosed by default," which is exactly the shape of a C2/backdoor pattern regardless of intent. Prefer a neutral default (`127.0.0.1`, empty, or an obvious placeholder) and let the user supply their own value instead of the developer's. See `references/publish-review.md` for the full pre-submission checklist this belongs to.
 
 ## When Helping the User
 
