@@ -1,10 +1,10 @@
 # supernote-plugin-dev
 
-A Claude Code skill/plugin for building, debugging, and extending [Supernote](https://supernote.com/) e-ink device plugins with the `sn-plugin-lib` SDK (React Native + Android).
+An [Agent Skill](https://agentskills.io) for building, debugging, and extending [Supernote](https://supernote.com/) e-ink device plugins with the `sn-plugin-lib` SDK (React Native + Android). Distributed as a Claude Code plugin here, but the skill itself is written to the open, tool-agnostic [Agent Skills format](https://agentskills.io/specification) — no Claude-specific frontmatter or hooks — so it works in any Agent Skills-compatible client (Antigravity, Cursor, Gemini CLI, Codex, VS Code Copilot, and 30+ others — see the [full client list](https://agentskills.io/clients)).
 
 It bundles hard-won, verified knowledge — API signatures, coordinate-system rules, permission gotchas, native-module pitfalls, build/deploy/debug workflows — gathered from building real Supernote plugins and cross-checked against the live [`docs.supernote.com`](https://docs.supernote.com) documentation MCP. It is **generic**: not tied to any specific plugin, safe to install in any Supernote plugin repo.
 
-## Install
+## Install (Claude Code)
 
 Inside a Supernote plugin project, in an interactive Claude Code session:
 
@@ -24,6 +24,21 @@ When this repo publishes a new version:
 ```
 
 Updates are explicit, not automatic.
+
+## Install (Antigravity, or any other Agent Skills client)
+
+The `skills/supernote-plugin-dev/` folder is a self-contained, spec-compliant Agent Skill (just `SKILL.md` + `references/`, no `.claude-plugin/` needed to read it) — copy or link it into whatever directory your tool scans for skills.
+
+**Antigravity**: place it at `<workspace-root>/.agents/skills/supernote-plugin-dev/` (workspace-level) or `~/.gemini/config/skills/supernote-plugin-dev/` (global, all workspaces). There's no remote-install command documented for Antigravity yet, so pull the folder in explicitly, e.g. as a git submodule so it stays updatable:
+
+```bash
+git submodule add https://github.com/gorlix/supernote-plugin-dev.git .agents/skills/.vendor/supernote-plugin-dev
+ln -s .vendor/supernote-plugin-dev/skills/supernote-plugin-dev .agents/skills/supernote-plugin-dev
+```
+
+(or simpler, if you don't need updates via `git submodule update`: just `git clone` and copy the `skills/supernote-plugin-dev/` folder in directly.)
+
+**Other clients**: check [agentskills.io/clients](https://agentskills.io/clients) for your tool's specific skills directory — the same `skills/supernote-plugin-dev/` folder works everywhere, only the destination path changes.
 
 ## What's inside
 
