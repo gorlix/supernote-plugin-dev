@@ -47,6 +47,7 @@ if (ok) {
 - 150ms delay before `closePluginView()` is required: `show()` dispatches via `handler.post`; closing too early freezes before render.
 - When `onBubbleTap` fires, native has already called `showPluginView()` — do NOT call it again from JS.
 - `pageY` from `onDragEnd` is pre-converted to EMR by the native module.
+- **Use `PixelFormat.TRANSLUCENT`, not `OPAQUE`, for a rounded or transparent overlay.** With `OPAQUE`, the transparent regions outside a rounded-corner chip (the corners, any padding) render as solid **black** on e-ink — the whole bubble looks like a black square (confirmed on Manta). `TRANSLUCENT` keeps those regions transparent so only the chip shows.
 
 ### Foreground app detection — auto-hide overlay when leaving Note app
 
