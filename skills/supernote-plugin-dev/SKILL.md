@@ -68,6 +68,7 @@ against the `supernote-docs` MCP, which is authoritative):
 | Floating window overlay | `references/floating-window.md` |
 | Pen lasso, EMR pen disable, scoped pen lock | `references/pen-emr.md` |
 | SQLite local storage in plugins | `references/sqlite.md` |
+| Preparing to submit a plugin for review / publish | `references/publish-review.md` |
 
 The reference files contain **authoritative API signatures and constraints** gathered from real
 plugin builds — do not rely on memory alone; the live MCP wins on any conflict.
@@ -219,9 +220,14 @@ What do you need to do?
 │     3. recognizeElements(elements, pageSize) → APIResponse<string>
 │     4. cancelRecognize() to abort a long-running recognition if needed
 │
-└─ Extract hardcoded strings / add multi-language support (i18n)
-   → references/i18n.md Pattern 7 (JSON button name) + Pattern 10 (registerLangListener)
-   → Generic extract-translate-convert workflow for new locales: patterns.md Pattern 12
+├─ Extract hardcoded strings / add multi-language support (i18n)
+│  → references/i18n.md Pattern 7 (JSON button name) + Pattern 10 (registerLangListener)
+│  → Generic extract-translate-convert workflow for new locales: patterns.md Pattern 12
+│
+└─ Ready to submit the plugin for review / publish, unsure if it'll pass
+   → references/publish-review.md — self-audit checklist derived from Supernote's
+     published review process (permissions, file/data ops, network disclosure, description
+     accuracy)
 ```
 
 ## Common Gotchas
