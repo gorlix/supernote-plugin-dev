@@ -1,0 +1,12 @@
+{
+  "name": "supernote-plugin-dev",
+  "version": "1.0.0",
+  "description": "Generic Claude Code skill for building, debugging, and extending Supernote e-ink device plugins with the sn-plugin-lib SDK (React Native + Android).",
+  "author": {
+    "name": "Gorlix",
+    "url": "https://github.com/gorlix"
+  },
+  "homepage": "https://github.com/gorlix/supernote-plugin-dev",
+  "license": "MIT",
+  "keywords": ["supernote", "e-ink", "react-native", "plugin-development"]
+}
